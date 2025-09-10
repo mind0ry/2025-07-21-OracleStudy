@@ -1,19 +1,19 @@
 package com.sist.main;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 import com.sist.dao.BoardDAO;
 import com.sist.vo.BoardVO;
-public class BoardInsert extends JPanel implements ActionListener{
+public class BoardUpdate extends JPanel implements ActionListener{
      JLabel la1,la2,la3,la4,la5;
      JTextField tf1,tf2;
      JTextArea ta;
      JPasswordField pf;
      JButton b1,b2;
      private BoardMainFrame bm;
-     public BoardInsert(BoardMainFrame bm)
+     int no=0;
+     public BoardUpdate(BoardMainFrame bm)
      {
     	 this.bm=bm;
     	 la1=new JLabel("수정하기",JLabel.CENTER);
@@ -31,7 +31,7 @@ public class BoardInsert extends JPanel implements ActionListener{
      	 ta=new JTextArea();
      	 JScrollPane js=new JScrollPane(ta);
      	 
-     	 b1=new JButton("글쓰기");
+     	 b1=new JButton("수정");
      	 b2=new JButton("취소");
      	 
      	 setLayout(null);
@@ -105,16 +105,35 @@ public class BoardInsert extends JPanel implements ActionListener{
 			vo.setContent(content);
 			vo.setSubject(subject);
 			vo.setPwd(pwd);
+			vo.setNo(no);
 			
 			BoardDAO dao=BoardDAO.newInstance();
-			dao.boardInsert(vo);
-			
-			bm.card.show(bm.getContentPane(), "list");
-			bm.bList.print();
+			boolean bCheck=dao.boardUpdate(vo);
+			if(bCheck==false)
+			{
+				JOptionPane.showMessageDialog(this, "비밀번호가 틀립니다");
+				pf.setText("");
+				pf.requestFocus();
+			}
+			else
+			{
+			  bm.card.show(bm.getContentPane(), "detail");
+			  bm.bDetail.print(no);
+			}
 		}
 		else if(e.getSource()==b2)
 		{
-			bm.card.show(bm.getContentPane(), "list");
+			bm.card.show(bm.getContentPane(), "detail");
+			bm.bDetail.print(no);
 		}
+	 }
+	 public void print(int no)
+	 {
+		 this.no=no;
+		 BoardDAO dao=BoardDAO.newInstance();
+		 BoardVO vo=dao.boardUpdateData(no);
+		 tf1.setText(vo.getName());
+		 tf2.setText(vo.getSubject());
+		 ta.setText(vo.getContent());
 	 }
 }
