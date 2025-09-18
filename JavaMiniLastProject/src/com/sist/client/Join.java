@@ -57,6 +57,9 @@ public class Join extends JFrame {
 		rb2.setBounds(155,120,70,30);
 		add(rb1);add(rb2);
 		
+		b4=new JButton("우편번호검색");
+		b4.setBounds(235,155,140,30);
+		add(b4);
 		tf3.setBounds(80,155,150,30);
 		add(tf3);
 		
