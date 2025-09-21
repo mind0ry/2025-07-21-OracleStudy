@@ -47,6 +47,7 @@ public class ClientMainFrame extends JFrame implements ActionListener {
 		menu.b6.addActionListener(this);
 		menu.b3.addActionListener(this);
 		menu.b4.addActionListener(this);
+		menu.b2.addActionListener(this);
 		
 		login.b1.addActionListener(this); // 로그인
 		login.b2.addActionListener(this); // 회원가입
@@ -101,6 +102,10 @@ public class ClientMainFrame extends JFrame implements ActionListener {
 		if(e.getSource()==menu.b1) {
 			cp.card.show(cp, "HF");
 		}
+		else if(e.getSource()==menu.b2) {
+			cp.card.show(cp,"MF");
+			cp.mf.print();
+		}
 		else if(e.getSource()==join.b3) {
 			ic.tf.setText("");
 			ic.rla.setText("");
@@ -113,7 +118,8 @@ public class ClientMainFrame extends JFrame implements ActionListener {
 			cp.card.show(cp, "FD");
 		}
 		else if(e.getSource()==menu.b5) {
-			cp.card.show(cp, "CF");
+			cp.card.show(cp, "NEWS");
+			cp.news.newsPrint("맛집");
 			}
 		else if(e.getSource()==menu.b6) {
 			cp.card.show(cp, "BF");
@@ -146,6 +152,7 @@ public class ClientMainFrame extends JFrame implements ActionListener {
 				login.setVisible(false);
 				setVisible(true);
 				setTitle(vo.getName());
+				cp.myId=id;
 			}
 		}
 		else if(e.getSource()==login.b2) {

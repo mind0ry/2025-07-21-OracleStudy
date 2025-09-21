@@ -9,6 +9,7 @@ import javax.swing.border.LineBorder;
 import com.sist.commons.imageChange;
 import com.sist.dao.FoodDAO;
 import com.sist.vo.FoodVO;
+import com.sist.vo.JjimVO;
 public class FoodDetail extends JPanel implements ActionListener
 {
     ControllerPanel cp;
@@ -18,6 +19,7 @@ public class FoodDetail extends JPanel implements ActionListener
     JTextPane ta; 
     JButton b1,b2,b3;
     static int type=0;
+    int fno=0;
     public FoodDetail(ControllerPanel cp)
     {
     	setLayout(null);
@@ -51,6 +53,7 @@ public class FoodDetail extends JPanel implements ActionListener
     	p.setBounds(510,330,390, 35);
     	add(p);
     	
+    	b1.addActionListener(this);
     	b3.addActionListener(this);
     }
 	@Override
@@ -70,11 +73,23 @@ public class FoodDetail extends JPanel implements ActionListener
 				cp.ff.print();
 			}
 		}
+		else if(e.getSource()==b1) {
+			FoodDAO dao=FoodDAO.newInstance();
+			JjimVO vo=new JjimVO();
+			vo.setFno(fno);
+			vo.setId(cp.myId);
+			int res=dao.jjimInsert(vo);
+			if(res>0) {
+				JOptionPane.showMessageDialog(this, "찜 완료!!");
+				print(fno);
+			}
+		}
 	}
 	/*{"업체명","주소","전화","음식종류","영업시간",
 		  "주차","평점","가격대","테마"}*/
 	public void print(int fno)
 	{
+		this.fno=fno;
 		FoodDAO dao=FoodDAO.newInstance();
 		FoodVO vo=dao.foodDetailData(fno);
 		lap[0].setText(vo.getName());
@@ -93,6 +108,12 @@ public class FoodDetail extends JPanel implements ActionListener
 			Image img=imageChange.getImage(new ImageIcon(url), 300, 350);
 			mainLa.setIcon(new ImageIcon(img));
 		}catch(Exception ex) {}
+		int count=dao.jjimCheck(fno, cp.myId);
+		if(count==0) {
+			b1.setEnabled(true);
+		} else {
+			b1.setEnabled(false);
+		}
 	}
 	
 	
